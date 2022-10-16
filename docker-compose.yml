@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  modx-app:
+    build: ./modx-app
+    user: 1000:1000
+    environment:
+      - APACHE_RUN_USER=#1000
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - './modx-app/:/var/www/html'
+  mysql-db:
+    image: 'mysql:5.7'
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: modx
+    ports:
+      - '3306:3306'
+    command: mysqld --sql-mode=NO_ENGINE_SUBSTITUTION
+    volumes:
+      - './mysql-db:/var/lib/mysql'
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
